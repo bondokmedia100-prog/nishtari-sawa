@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: nishtari-sawa-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
