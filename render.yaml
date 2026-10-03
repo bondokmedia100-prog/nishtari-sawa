@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: nishtari-sawa-api
+    name: nishtari-sawa
     runtime: docker
     plan: free
-    region: frankfurt
+    region: ohio
     dockerfilePath: ./dockerfile
     dockerContext: .
     healthCheckPath: /health

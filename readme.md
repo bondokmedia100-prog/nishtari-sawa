@@ -1,11 +1,38 @@
-# Nishtari Sawa
+# نشتري سوا
 
-Private starter repository for the Egyptian Arabic group-buying app.
+تطبيق Expo للموبايل بواجهة مصرية، وخادم API بـ Node.js 22 وFastify، وقاعدة PostgreSQL/PostGIS. يعرض الخادم الصفقات النشطة ضمن 1–3 كم من موقع المستخدم من دون كشف عنوان قائد المجموعة.
 
-The complete Expo mobile app and Node/PostGIS server source is packaged in `nishtari-sawa-project.zip`. Render builds the API from that source bundle using the root `Dockerfile` and `render.yaml`.
+## النسخة المنشورة
 
-## Render setup
+- عنوان API: https://nishtari-sawa.onrender.com
+- `GET /` يعرض تعريفًا بالخدمة وروابطها.
+- `GET /health` يفحص اتصال الخادم بقاعدة البيانات.
+- `GET /api/v1/deals/nearby?lat=30.0444&lng=31.2357&radius_km=2` يعرض صفقات القاهرة التجريبية.
+- ترحيلات قاعدة البيانات والبذور تعمل تلقائيًا عند بدء الخادم، مع سجل يمنع إعادة تطبيقها.
 
-This free web service requires `DATABASE_URL` from a Supabase PostgreSQL project. Do not commit database credentials. The health endpoint checks PostgreSQL, so the service will not become healthy until that secret is configured.
+## تشغيل تطبيق Expo
 
-The mobile app code and local development instructions are in the zip archive.
+عنوان الخادم موجود في `mobile/.env.example`، والملف المحلي `mobile/.env` غير مضاف إلى Git. لتشغيل التطبيق:
+
+1. ثبّت Node.js ثم شغّل `npm install` داخل `mobile/`.
+2. شغّل `npx expo start` داخل `mobile/` وافتح المشروع باستخدام Expo Go.
+3. اسمح للتطبيق باستخدام الموقع حتى يعرض الصفقات القريبة.
+
+إذا أردت تشغيل API محليًا، انسخ `mobile/.env.example` إلى `mobile/.env` ثم غيّر العنوان إلى IP الكمبيوتر على شبكة Wi-Fi نفسها، مثل `http://192.168.1.20:3000`؛ لا تستخدم `localhost` على الهاتف.
+
+## تشغيل الخادم محليًا
+
+1. انسخ `.env.example` إلى `.env` وضع كلمة مرور محلية عشوائية من أحرف وأرقام فقط لـ PostgreSQL، وسرًا عشوائيًا لـ `JWT_SECRET` بطول 32 حرفًا على الأقل. لا ترفع ملف `.env` إلى Git.
+2. شغّل `docker compose up --build` من مجلد المشروع. ينشئ PostGIS قاعدة محلية، ويطبّق الخادم ملفات SQL تلقائيًا.
+3. افحص `http://localhost:3000/health`.
+
+لا تستخدم إعدادات `.env.example` أو كلمات مرور محلية كأسرار إنتاج. متغيرا `DATABASE_URL` و`JWT_SECRET` في Render محفوظان ضمن إعدادات الخدمة فقط.
+
+## حالة المنتج وحدوده
+
+- الصفقات والموردون الحاليون بيانات تجريبية في القاهرة، وليست عروضًا حقيقية.
+- تسجيل الدخول وإنشاء الحساب والتحقق عبر OTP غير مطبقة. طلب الانضمام يتطلب JWT صالحًا.
+- الدفع الإلكتروني وEscrow غير موصولين؛ طلب الانضمام لا يخصم أموالًا.
+- لا تنفّذ مشتريات حقيقية قبل اختيار مزود هوية وOTP ومزود دفع ملائم لمصر، وتحديد سياسة الاسترداد والامتثال.
+- خطة Render المجانية قد توقف الخادم بعد الخمول، فيتأخر أول طلب. قاعدة البيانات المجانية الحالية معروضة للانتهاء في 1 نوفمبر 2026.
+- يلزم قبل الإطلاق التجاري استبدال البيانات التجريبية، وإضافة مراقبة ونسخ احتياطية وسياسة خصوصية واستضافة دائمة.
