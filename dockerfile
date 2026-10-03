@@ -1,7 +1,7 @@
 FROM node:22-alpine
 RUN apk add --no-cache unzip
 WORKDIR /app
-COPY nishtari-sawa-project.zip /tmp/nishtari-sawa-project.zip
+COPY nishtari-sawa-project-v2.zip /tmp/nishtari-sawa-project.zip
 RUN unzip -q /tmp/nishtari-sawa-project.zip -d /tmp/source \
     && cp -R /tmp/source/nishtari-sawa-project/server/. /app/ \
     && npm install --omit=dev
