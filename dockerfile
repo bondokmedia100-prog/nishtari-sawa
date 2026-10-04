@@ -1,11 +1,11 @@
 FROM node:22-alpine
 RUN apk add --no-cache unzip
 WORKDIR /app
-COPY nishtari-sawa-project-v12.zip /tmp/nishtari-sawa-project-v12.zip
-RUN unzip -q /tmp/nishtari-sawa-project-v12.zip -d /tmp/source \
+COPY nishtari-sawa-project-v14.zip /tmp/nishtari-sawa-project-v14.zip
+RUN unzip -q /tmp/nishtari-sawa-project-v14.zip -d /tmp/source \
     && cp -R /tmp/source/nishtari-sawa-project/server/. /app/ \
     && npm install --omit=dev --no-audit --no-fund \
-    && rm -rf /tmp/source /tmp/nishtari-sawa-project-v12.zip
+    && rm -rf /tmp/source /tmp/nishtari-sawa-project-v14.zip
 ENV PORT=3000
 EXPOSE 3000
 CMD ["npm", "start"]
